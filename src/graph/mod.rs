@@ -1,6 +1,6 @@
-pub mod graph;
+mod graph;
 pub use graph::Graph;
-pub mod edge;
+mod edge;
 pub use edge::Edge;
-pub mod node;
+mod node;
 pub use node::Node;

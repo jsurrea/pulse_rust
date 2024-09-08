@@ -1,6 +1,5 @@
+use super::{Edge, Node};
 use crate::config::Config;
-use crate::graph::Edge;
-use crate::graph::Node;
 use std::error::Error;
 use std::fs;
 
