@@ -42,5 +42,5 @@ Path: [1, 1363, 1358, 1357, 1356, 1276, 1273, 1277, 1269, 1241, 1240, 1235, 956,
 
 Tested with the USA Road NY dataset described previously in a MacBook Pro M1 with 16GB of RAM.
 
-**Rust:** 45.314667 ms (rustc 1.80.0)
+**Rust:** 45.314667 ms (rustc 1.80.0)  
 **Java:** 89.940708 ms (openjdk version "17.0.11")
