@@ -2,12 +2,11 @@ pub mod algorithm;
 pub mod config;
 pub mod graph;
 use algorithm::initialization::PulseState;
+use algorithm::recursion::pulse_recursion;
 use graph::{Graph, Node};
 
-pub fn run(graph: &Graph, start_node: usize, end_node: usize, time_constraint: u64) {
-    let distance: u64 = 0;
-    let time: u64 = 0;
-    let path: Vec<Node> = vec![];
-    let pulse_state = PulseState::new(graph, end_node);
-    //algorithm::pulse_recursive(graph, start_node, distance, time);
+pub fn run(graph: &Graph, start_node: usize, end_node: usize, time_constraint: u64) -> PulseState {
+    let mut pulse_state = PulseState::new(graph, start_node, end_node, time_constraint);
+    pulse_recursion(&mut pulse_state, start_node, 0, 0);
+    pulse_state
 }

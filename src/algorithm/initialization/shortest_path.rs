@@ -1,6 +1,7 @@
 use crate::graph::Graph;
 use std::cmp::Ordering;
 use std::collections::BinaryHeap;
+use std::{backtrace, path};
 
 #[derive(Debug)]
 pub enum ShortestPathCriterion {
@@ -31,8 +32,9 @@ pub fn shortest_path(
     graph: &Graph,
     start_node_id: usize,
     criterion: ShortestPathCriterion,
-) -> Vec<u64> {
+) -> (Vec<u64>, Vec<usize>) {
     let mut resource: Vec<u64> = vec![u64::MAX; graph.num_nodes + 1];
+    let mut backtrack: Vec<usize> = vec![0; graph.num_nodes + 1];
     let mut heap = BinaryHeap::new();
 
     resource[start_node_id] = 0;
@@ -59,10 +61,50 @@ pub fn shortest_path(
 
             if next_element.cost < resource[edge.to] {
                 resource[edge.to] = next_element.cost;
+                backtrack[edge.to] = node_id;
                 heap.push(next_element);
             }
         }
     }
 
-    resource
+    (resource, backtrack)
+}
+
+pub fn reconstruct_path(
+    start_node_id: usize,
+    end_node_id: usize,
+    backtrack: &Vec<usize>,
+) -> Vec<usize> {
+    let mut current_node = end_node_id;
+    let mut path = vec![];
+
+    while current_node != start_node_id {
+        path.push(current_node);
+        current_node = backtrack[current_node];
+    }
+
+    path.push(start_node_id);
+    path.reverse();
+
+    path
+}
+
+pub fn calculate_resource_consumption(graph: &Graph, path: &Vec<usize>) -> (u64, u64) {
+    let mut distance = 0;
+    let mut time = 0;
+
+    for i in 0..path.len() - 1 {
+        let current_node = path[i];
+        let next_node = path[i + 1];
+
+        for edge in &graph.adj_list[current_node] {
+            if edge.to == next_node {
+                distance += edge.distance;
+                time += edge.time;
+                break;
+            }
+        }
+    }
+
+    (distance, time)
 }

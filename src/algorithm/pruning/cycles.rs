@@ -1,10 +1,10 @@
 use super::PruningStrategy;
 use crate::algorithm::initialization::PulseState;
 
-pub struct BoundsPruningStrategy {}
+pub struct CyclesPruningStrategy {}
 
-impl PruningStrategy for BoundsPruningStrategy {
+impl PruningStrategy for CyclesPruningStrategy {
     fn prune(&self, state: &PulseState, current_node: usize) -> bool {
-        false
+        state.visited[current_node]
     }
 }
