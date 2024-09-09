@@ -9,6 +9,12 @@ use crate::{
     graph::Graph,
 };
 
+#[derive(Copy, Debug, Clone)]
+pub struct Label {
+    pub distance: u64,
+    pub time: u64,
+}
+
 #[derive(Debug)]
 pub struct PulseState<'a> {
     pub graph: &'a Graph,
@@ -16,6 +22,7 @@ pub struct PulseState<'a> {
     pub end_node: usize,
     pub time_constraint: u64,
     pub visited: Vec<bool>,
+    pub labels: Vec<[Label; 3]>, // MemorySize = 3
     pub current_path: Vec<usize>,
     pub dual_bounds_distance: Vec<u64>,
     pub dual_bounds_time: Vec<u64>,
@@ -34,6 +41,13 @@ impl PulseState<'_> {
     ) -> PulseState {
         // Assume that the graph is bidirectional, so no need to invert it
         let visited = vec![false; graph.num_nodes + 1];
+        let labels = vec![
+            [Label {
+                distance: u64::MAX,
+                time: u64::MAX
+            }; 3];
+            graph.num_nodes + 1
+        ];
         let (dual_bounds_distance, _) =
             shortest_path(graph, end_node, ShortestPathCriterion::Distance);
         let (dual_bounds_time, backtracking_time) =
@@ -43,9 +57,9 @@ impl PulseState<'_> {
             calculate_resource_consumption(graph, &primal_bound_path);
         let pruning_strategies: [Box<dyn PruningStrategy>; 4] = [
             Box::new(CyclesPruningStrategy {}),
-            Box::new(DominancePruningStrategy {}),
             Box::new(FeasibilityPruningStrategy {}),
             Box::new(BoundsPruningStrategy {}),
+            Box::new(DominancePruningStrategy {}),
         ];
 
         PulseState {
@@ -54,6 +68,7 @@ impl PulseState<'_> {
             end_node,
             time_constraint,
             visited,
+            labels,
             current_path: vec![],
             dual_bounds_distance,
             dual_bounds_time,

@@ -1,7 +1,6 @@
 use crate::graph::Graph;
 use std::cmp::Ordering;
 use std::collections::BinaryHeap;
-use std::{backtrace, path};
 
 #[derive(Debug)]
 pub enum ShortestPathCriterion {

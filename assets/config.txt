@@ -1,4 +1,4 @@
-DataFile:USA-road-NY.txt
+DataFile:assets/USA-road-NY.txt
 Number of Arcs:733846
 Number of Nodes:264346
 Time Constraint:751235

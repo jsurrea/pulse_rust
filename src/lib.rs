@@ -3,7 +3,7 @@ pub mod config;
 pub mod graph;
 use algorithm::initialization::PulseState;
 use algorithm::recursion::pulse_recursion;
-use graph::{Graph, Node};
+use graph::Graph;
 
 pub fn run(graph: &Graph, start_node: usize, end_node: usize, time_constraint: u64) -> PulseState {
     let mut pulse_state = PulseState::new(graph, start_node, end_node, time_constraint);
